@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'current_team_id',
     ];
 
     /**
@@ -47,7 +48,30 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'current_team_id' => 'integer',
         ];
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class)
+            ->withTimestamps()
+            ->withPivot('role');
+    }
+
+    public function currentTeam()
+    {
+        return $this->belongsTo(Team::class, 'current_team_id');
+    }
+
+    public function ownedTeams()
+    {
+        return $this->hasMany(Team::class, 'owner_user_id');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 
     /**
