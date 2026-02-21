@@ -97,7 +97,7 @@ new class extends Component {
                             {{ $message->created_at->diffForHumans() }}
                         </flux:text>
                     </div>
-                    <div class="mt-2 whitespace-pre-line text-zinc-800 dark:text-zinc-100">
+                    <div class="mt-2 whitespace-pre-line text-zinc-800 dark:text-zinc-200">
                         {{ $message->body }}
                     </div>
                 </div>

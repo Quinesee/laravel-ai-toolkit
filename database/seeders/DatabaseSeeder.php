@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $owner = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Jeremy',
+            'email' => 'jeremy@example.com',
         ]);
 
         $team = Team::factory()
@@ -30,16 +30,36 @@ class DatabaseSeeder extends Seeder
                 'name' => "{$owner->name}'s Team",
             ]);
 
-        $member = User::factory()->create([
-            'name' => 'Second User',
-            'email' => 'second@example.com',
+        $members = collect([
+            User::factory()->create([
+                'name' => 'Jim',
+                'email' => 'jim@example.com',
+            ]),
+            User::factory()->create([
+                'name' => 'Ava',
+                'email' => 'ava@example.com',
+            ]),
+            User::factory()->create([
+                'name' => 'Miles',
+                'email' => 'miles@example.com',
+            ]),
+            User::factory()->create([
+                'name' => 'Priya',
+                'email' => 'priya@example.com',
+            ]),
         ]);
 
         $team->users()->attach($owner, ['role' => 'owner']);
-        $team->users()->attach($member, ['role' => 'member']);
+
+        foreach ($members as $member) {
+            $team->users()->attach($member, ['role' => 'member']);
+        }
 
         $owner->forceFill(['current_team_id' => $team->id])->save();
-        $member->forceFill(['current_team_id' => $team->id])->save();
+
+        foreach ($members as $member) {
+            $member->forceFill(['current_team_id' => $team->id])->save();
+        }
 
         $tags = TicketTag::factory()->count(6)->create();
 
@@ -53,7 +73,7 @@ class DatabaseSeeder extends Seeder
             ->for($team)
             ->create();
 
-        $ticketOwners = collect([$owner, $member]);
+        $ticketOwners = collect([$owner])->merge($members);
 
         foreach ($tickets as $index => $ticket) {
             $ticketOwner = $ticketOwners[$index % $ticketOwners->count()];
