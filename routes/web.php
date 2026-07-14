@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketTriageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,6 +14,9 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::livewire('tickets', 'pages::tickets.index')->name('tickets.index');
     Route::livewire('tickets/{ticket}', 'pages::tickets.show')->name('tickets.show');
+
+    Route::post('tickets/{ticket}/ai/triage', TicketTriageController::class)
+        ->name('tickets.ai.triage');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

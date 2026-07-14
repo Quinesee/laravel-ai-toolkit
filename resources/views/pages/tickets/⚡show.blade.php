@@ -23,10 +23,7 @@ new class extends Component {
     #[Computed]
     public function ticketMessages()
     {
-        return $this->ticket->messages()
-            ->with('user')
-            ->oldest()
-            ->get();
+        return $this->ticket->messages()->with('user')->oldest()->get();
     }
 
     #[Computed]
@@ -73,19 +70,37 @@ new class extends Component {
     @if ($this->tags->isNotEmpty())
         <div class="flex flex-wrap gap-2">
             @foreach ($this->tags as $tag)
-                <span class="rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+                <span
+                    class="rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+                >
                     {{ $tag->name }}
                 </span>
             @endforeach
         </div>
     @endif
 
+    <div class="space-y-5">
+        <form
+            action="{{ route('tickets.ai.triage', ['ticket' => $this->ticket->id]) }}"
+            method="POST"
+        >
+            @csrf
+            <flux:button
+                type="submit"
+                variant="primary"
+            >
+                {{ __('Triage') }}
+            </flux:button>
+        </form>
+    </div>
+
     <div class="space-y-4">
         <flux:heading size="sm">{{ __('Conversation') }}</flux:heading>
 
         <div class="space-y-3">
             @forelse ($this->ticketMessages as $message)
-                <div class="rounded-lg border border-zinc-200 bg-white p-4 text-sm dark:border-zinc-700 dark:bg-zinc-900">
+                <div
+                    class="rounded-lg border border-zinc-200 bg-white p-4 text-sm dark:border-zinc-700 dark:bg-zinc-900">
                     <div class="flex items-center justify-between">
                         <flux:text class="text-xs text-zinc-500 dark:text-zinc-400">
                             {{ ucfirst($message->role) }}
@@ -102,7 +117,8 @@ new class extends Component {
                     </div>
                 </div>
             @empty
-                <div class="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-6 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
+                <div
+                    class="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-6 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
                     {{ __('No messages yet. Start the conversation below.') }}
                 </div>
             @endforelse
@@ -110,14 +126,20 @@ new class extends Component {
     </div>
 
     <div class="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
-        <flux:heading size="sm" class="mb-3">{{ __('Add a message') }}</flux:heading>
-        <form wire:submit="addMessage" class="space-y-3">
+        <flux:heading
+            class="mb-3"
+            size="sm"
+        >{{ __('Add a message') }}</flux:heading>
+        <form
+            class="space-y-3"
+            wire:submit="addMessage"
+        >
             <div>
                 <textarea
-                    wire:model="messageBody"
-                    rows="4"
                     class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-sm text-zinc-900 shadow-sm focus:border-zinc-400 focus:outline-none focus:ring-0 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
                     placeholder="{{ __('Write a reply...') }}"
+                    rows="4"
+                    wire:model="messageBody"
                 ></textarea>
                 @error('messageBody')
                     <div class="mt-2 text-xs text-red-600">{{ $message }}</div>
@@ -125,7 +147,10 @@ new class extends Component {
             </div>
 
             <div class="flex items-center gap-3">
-                <flux:button variant="primary" type="submit">
+                <flux:button
+                    type="submit"
+                    variant="primary"
+                >
                     {{ __('Post Message') }}
                 </flux:button>
                 <flux:text class="text-xs text-zinc-500 dark:text-zinc-400">
