@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketChatController;
 use App\Http\Controllers\TicketTriageController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('tickets/{ticket}/ai/triage', TicketTriageController::class)
         ->name('tickets.ai.triage');
+    Route::post('tickets/{ticket}/ai/chat', TicketChatController::class)
+        ->name('tickets.ai.chat');
 });
 
 require __DIR__ . '/settings.php';
