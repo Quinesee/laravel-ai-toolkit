@@ -20,6 +20,7 @@ class AiRun extends Model
         'started_at',
         'finished_at',
         'error_message',
+        'output_text',
     ];
 
     protected $casts = [

@@ -171,6 +171,50 @@ new class extends Component {
         </form>
     </div>
 
+    <div
+        class="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900"
+        x-data="ticketDraftDemo({{ $this->ticket->id }}, '')"
+    >
+        <div class="flex items-center justify-between">
+            <flux:heading size="sm">{{ __('Draft Reply') }}</flux:heading>
+            <flux:text class="text-xs text-zinc-500 dark:text-zinc-400">
+                {{ __('Stream a reply before sending.') }}
+            </flux:text>
+        </div>
+
+        <div
+            class="mt-4 rounded-lg border border-zinc-200 bg-white p-4 text-sm text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200">
+            <div
+                class="whitespace-pre-line"
+                x-text="draft || '{{ __('Click Draft Reply to begin...') }}'"
+            ></div>
+        </div>
+
+        <div class="mt-4 flex items-center gap-3">
+            <flux:button
+                @click="streamDraft"
+                type="button"
+                variant="primary"
+            >
+                {{ __('Draft Reply') }}
+            </flux:button>
+            <flux:button
+                @click="cancelStream"
+                type="button"
+                variant="ghost"
+            >
+                {{ __('Cancel') }}
+            </flux:button>
+            <flux:button
+                @click="insertIntoReply"
+                type="button"
+                variant="ghost"
+            >
+                {{ __('Insert Into Reply') }}
+            </flux:button>
+        </div>
+    </div>
+
     <div class="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:heading
             class="mb-3"
@@ -183,6 +227,7 @@ new class extends Component {
             <div>
                 <textarea
                     class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-sm text-zinc-900 shadow-sm focus:border-zinc-400 focus:outline-none focus:ring-0 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+                    data-ticket-reply
                     placeholder="{{ __('Write a reply...') }}"
                     rows="4"
                     wire:model="messageBody"
